@@ -1,43 +1,57 @@
 import Head from "next/head";
 import styled from "styled-components";
+import { align_center } from "../styles/mixins";
 
-const Parallax = styled.div`
+// wrapper for scrolling
+const ParallaxWrapper = styled.div`
   height: 100vh;
   overflow-x: hidden;
   overflow-y: auto;
-  perspective: 1px;
-  margin: 0;
+  perspective: 300px;
+`;
+
+const ParallaxGroup = styled.div`
+  position: relative;
+  height: 100vh;
+  transform-style: preserve-3d;
+`;
+const IntroScreen = styled(ParallaxGroup)`
+  height: 100vh;
+  background-color: tomato;
+  ${align_center}
+  z-index: 5;
+`;
+const OutroScreen = styled(ParallaxGroup)`
+  height: 100vh;
+  background-color: teal;
+  ${align_center}
+`;
+
+const Group1 = styled(ParallaxGroup)`
+  > div:first-child {
+    background-color: lime;
+  }
+`;
+const Group2 = styled(ParallaxGroup)`
+  > div:first-child {
+    background-color: yellow;
+  }
 `;
 
 const ParallaxLayer = styled.div`
   position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  inset: 0;
+  ${align_center}
 `;
 
-const Layer1 = styled(ParallaxLayer)`
+const BaseLayer = styled(ParallaxLayer)`
+  transform: translateZ(-300px);
+`;
+const MidLayer = styled(ParallaxLayer)`
   transform: translateZ(0);
-  background-color: red;
-  width: 100%;
-  height: 100em;
 `;
-
-const Layer2 = styled(ParallaxLayer)`
-  transform: translateZ(-1px);
-  background-color: green;
-  height: 50em;
-  top: 10em;
-  width: 100%;
-`;
-// decreasing the value of translateZ will push element further away
-const Layer3 = styled(ParallaxLayer)`
-  transform: translateZ(-2px);
-  background-color: blue;
-  height: 50em;
-  width: 100%;
-  top: 20em;
+const TopLayer = styled(ParallaxLayer)`
+  transform: translateZ(200px);
 `;
 
 export default function Home() {
@@ -49,16 +63,18 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Parallax>
-        <Layer1>layer 1</Layer1>
-        <Layer2>layer 2</Layer2>
-        <Layer3>layer 3</Layer3>
-      </Parallax>
-      <Parallax>
-        <Layer1>layer 1</Layer1>
-        <Layer2>layer 2</Layer2>
-        <Layer3>layer 3</Layer3>
-      </Parallax>
+      <ParallaxWrapper>
+        <IntroScreen> Intro Screen</IntroScreen>
+        <Group1>
+          <BaseLayer>Base Layer</BaseLayer>
+          <MidLayer>Mid Layer</MidLayer>
+        </Group1>
+        <Group2>
+          <MidLayer>Mid Layer</MidLayer>
+          <TopLayer>Top Layer</TopLayer>
+        </Group2>
+        <OutroScreen>Outro Screen</OutroScreen>
+      </ParallaxWrapper>
     </>
   );
 }
